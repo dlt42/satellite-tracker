@@ -48,3 +48,4 @@ To run client locally:
 * Click on a satellite in the map to open the existing edit form
 * Display a satellite using an icon of a satellite
 * Highlight any satellites that come too close to each other 
+* Reposition tooltip dynamically / or display details elsewhere
