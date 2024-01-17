@@ -1,0 +1,22 @@
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.Tooltip {
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: 0px;
+  background-color: #444;
+  color: white;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+  white-space: break-spaces;
+  min-width: 100px;
+}
+
+.Hidden {
+  display: none;
+}
