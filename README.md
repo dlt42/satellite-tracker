@@ -49,3 +49,4 @@ To run client locally:
 * Display a satellite using an icon of a satellite
 * Highlight any satellites that come too close to each other 
 * Reposition tooltip dynamically / or display details elsewhere
+* Optionally store satellite data in the browser data store
