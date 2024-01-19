@@ -1,17 +1,15 @@
 import { Result } from 'true-myth';
 
+import { PayloadDataType, ResponseDataType } from '../domain/domain.types';
 import {
+  ApiError,
   ApiRequest,
   ApiResponse,
   ApiSuccess,
-  PayloadDataType,
-  ResponseData,
-  ResponseDataType,
   ResponseSchema,
   URLDetails,
 } from './apiHandler.types';
 import { convertZodError, processApiRequestError } from './error';
-import { ApiError } from './error.types';
 
 const constructApiURL = ({
   baseURL,
@@ -50,7 +48,7 @@ const constructApiURL = ({
 
 const validateResponse = <T extends ResponseDataType, H>(
   schema: ResponseSchema<T>,
-  response: ResponseData<T>,
+  response: T,
   urlDetails: URLDetails,
   responseHeadersData: H
 ): Result<ApiSuccess<T, H>, ApiError> => {

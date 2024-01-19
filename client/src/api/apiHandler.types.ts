@@ -1,7 +1,27 @@
-import { Result } from 'true-myth';
 import { Schema } from 'zod';
 
-import { ApiError } from './error.types';
+import {
+  DomainError,
+  DomainResponseFull,
+  DomainSuccess,
+  PayloadDataType,
+  ResponseDataType,
+} from '../domain/domain.types';
+
+type ApiErrorBase = DomainError & {
+  urlDetails: URLDetails;
+};
+
+type RequestError = ApiErrorBase & {
+  type: 'REQUEST';
+};
+
+type ValidationError = ApiErrorBase & {
+  type: 'VALIDATION';
+  response: ResponseDataType;
+};
+
+export type ApiError = RequestError | ValidationError;
 
 export type URLDetails = {
   baseURL: string;
@@ -10,18 +30,7 @@ export type URLDetails = {
   id?: string;
 };
 
-export type ResponseDataType =
-  | Record<string, string | number | object | null>
-  | Array<unknown>
-  | string;
-
-export type PayloadDataType = Record<string, unknown>;
-
-export type ResponseData<T extends ResponseDataType> = T;
-
-export type ResponseSchema<T extends ResponseDataType> = Schema<
-  ResponseData<T>
->;
+export type ResponseSchema<T extends ResponseDataType> = Schema<T>;
 
 export type ApiRequest<
   T extends ResponseDataType,
@@ -43,12 +52,12 @@ export type ApiRequest<
       type: 'get' | 'delete';
     });
 
-export type ApiSuccess<T extends ResponseDataType, H> = {
-  data: ResponseData<T>;
+export type ApiSuccess<T extends ResponseDataType, H> = DomainSuccess<T> & {
   headers: Partial<H>;
 };
 
-export type ApiResponse<T extends ResponseDataType, H> = Result<
+export type ApiResponse<T extends ResponseDataType, H> = DomainResponseFull<
+  T,
   ApiSuccess<T, H>,
   ApiError
 >;

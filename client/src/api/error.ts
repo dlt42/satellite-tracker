@@ -1,12 +1,9 @@
 import { Result } from 'true-myth';
 import { ZodError } from 'zod';
 
-import { ApiResponse, ResponseDataType, URLDetails } from './apiHandler.types';
-
-export const getErrorMessage = (error: unknown) => {
-  if (!error) return 'Unknown error';
-  return error instanceof Error ? error.message : JSON.stringify(error);
-};
+import { ResponseDataType } from '../domain/domain.types';
+import { getErrorMessage } from '../util/shared';
+import { ApiResponse, URLDetails } from './apiHandler.types';
 
 // TODO: for large data sets there can be many duplicate errors
 // (i.e. a missing attribute for multiple array objects)

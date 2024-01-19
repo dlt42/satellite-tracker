@@ -9,14 +9,9 @@ import {
 } from 'react';
 import { Result } from 'true-myth';
 
-import { ResponseDataType } from '../api/apiHandler.types';
-import {
-  createSatellite,
-  deleteSatelliteById,
-  getAllSatellites,
-  getSatelliteById,
-  updateSatelliteById,
-} from '../domain/satellite';
+import API from '../api/api';
+import DB from '../db/db';
+import { ResponseDataType } from '../domain/domain.types';
 import { NewSatellite, Satellite, Satellites } from '../domain/satellite.types';
 
 type SatelliteContextType = {
@@ -52,13 +47,18 @@ export const SatelliteListProvider = ({
     setHighlightedSatellite(satellite);
   };
 
+  const getSource = () => {
+    const useApi = false;
+    return useApi ? API : DB;
+  };
+
   const getSatellite = async (
     id: number
   ): Promise<ContextResponse<Satellite>> => {
     const foundSatellite = satellites.find((satellite) => satellite.id === id);
     if (foundSatellite) return Result.ok(foundSatellite);
 
-    const result = await getSatelliteById(id);
+    const result = await getSource().getSatelliteById(id);
 
     if (result.isOk) {
       const loadedSatellite = result.value.data;
@@ -76,7 +76,7 @@ export const SatelliteListProvider = ({
       return Result.ok(satellites);
     }
 
-    const result = await getAllSatellites();
+    const result = await getSource().getAllSatellites();
 
     if (result.isOk) {
       const loadedSatellites = result.value.data;
@@ -97,12 +97,11 @@ export const SatelliteListProvider = ({
   const updateSatellite = async (
     satellite: Satellite
   ): Promise<ContextResponse<{}>> => {
-    const result = await updateSatelliteById(satellite);
+    const result = await getSource().updateSatellite(satellite);
 
     if (result.isOk) {
-      const updated = result.value.data;
       const revisedList = satellites.reduce((list, current) => {
-        return [...list, current.id === updated.id ? updated : current];
+        return [...list, current.id === satellite.id ? satellite : current];
       }, [] as Satellites);
       setSatellites(revisedList);
       return Result.ok({});
@@ -114,7 +113,7 @@ export const SatelliteListProvider = ({
   const addSatellite = async (
     satellite: NewSatellite
   ): Promise<ContextResponse<Satellite>> => {
-    const result = await createSatellite(satellite);
+    const result = await getSource().createSatellite(satellite);
 
     if (result.isOk) {
       const addedSatellite = result.value.data;
@@ -126,7 +125,7 @@ export const SatelliteListProvider = ({
   };
 
   const removeSatellite = async (id: number): Promise<ContextResponse<{}>> => {
-    const result = await deleteSatelliteById(id);
+    const result = await getSource().deleteSatelliteById(id);
 
     if (result.isOk) {
       const revisedList = satellites.filter((satellite) => satellite.id !== id);

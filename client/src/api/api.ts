@@ -1,19 +1,22 @@
 import { z } from 'zod';
 
 import { callApi } from '../api/apiHandler';
-import { ApiResponse } from '../api/apiHandler.types';
 import { processApiRequestError } from '../api/error';
 import {
+  CreateSatellite,
+  DeleteSatelliteById,
+  GetAllSatellites,
+  GetSatelliteById,
   NewSatellite,
   Satellite,
   Satellites,
   satelliteSchema,
+  SatellitesInterface,
   satellitesSchema,
-} from './satellite.types';
+  UpdateSatellite,
+} from '../domain/satellite.types';
 
-export const getAllSatellites = async (): Promise<
-  ApiResponse<Satellites, {}>
-> => {
+const getAllSatellites: GetAllSatellites = async () => {
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const path = `api/satellites`;
 
@@ -39,9 +42,7 @@ export const getAllSatellites = async (): Promise<
   return result;
 };
 
-export const getSatelliteById = async (
-  id: number
-): Promise<ApiResponse<Satellite, Error>> => {
+const getSatelliteById: GetSatelliteById = async (id) => {
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const path = `api/satellites/${id}`;
 
@@ -66,9 +67,7 @@ export const getSatelliteById = async (
   return result;
 };
 
-export const createSatellite = async (
-  satellite: NewSatellite
-): Promise<ApiResponse<Satellite, Error>> => {
+const createSatellite: CreateSatellite = async (satellite) => {
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const path = `api/satellites`;
 
@@ -95,9 +94,7 @@ export const createSatellite = async (
   return result;
 };
 
-export const updateSatelliteById = async (
-  satellite: Satellite
-): Promise<ApiResponse<Satellite, Error>> => {
+const updateSatellite: UpdateSatellite = async (satellite) => {
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const path = `api/satellites/${satellite.id}`;
 
@@ -124,9 +121,7 @@ export const updateSatelliteById = async (
   return result;
 };
 
-export const deleteSatelliteById = async (
-  id: number
-): Promise<ApiResponse<{}, Error>> => {
+const deleteSatelliteById: DeleteSatelliteById = async (id) => {
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const path = `api/satellites/${id}`;
 
@@ -151,3 +146,13 @@ export const deleteSatelliteById = async (
 
   return result;
 };
+
+const API: SatellitesInterface = {
+  getAllSatellites,
+  getSatelliteById,
+  createSatellite,
+  deleteSatelliteById,
+  updateSatellite,
+};
+
+export default API;
