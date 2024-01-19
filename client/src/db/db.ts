@@ -37,7 +37,6 @@ const callDB = async <T>(
       transaction.oncomplete = () => db.close();
     };
   });
-
   return result instanceof DOMException
     ? {
         error: getErrorMessage(result),
@@ -90,30 +89,27 @@ export const createSatellite: CreateSatellite = async (
 export const updateSatellite: UpdateSatellite = async (
   satellite: Satellite
 ) => {
-  const handler: Handler<number> = (objectStore, resolve, reject) => {
+  const handler: Handler<void> = (objectStore, resolve, reject) => {
     const result = objectStore.put(satellite);
     result.onerror = () => reject(result.error);
-    result.onsuccess = () =>
-      typeof result.result === 'number'
-        ? resolve(result.result)
-        : reject(new Error('Invalid ID type'));
+    result.onsuccess = () => resolve();
   };
   const result = await callDB(handler, 'readwrite');
   return result instanceof DomainError
     ? Result.err(result)
-    : Result.ok({ data: { ...satellite, id: result } });
+    : Result.ok({ data: satellite });
 };
 
 export const deleteSatelliteById: DeleteSatelliteById = async (id: number) => {
-  const handler: Handler<number> = (objectStore, resolve, reject) => {
+  const handler: Handler<void> = (objectStore, resolve, reject) => {
     const result = objectStore.delete(id);
     result.onerror = () => reject(result.error);
-    result.onsuccess = () => resolve(id);
+    result.onsuccess = () => resolve();
   };
   const result = await callDB(handler, 'readwrite');
   return result instanceof DomainError
     ? Result.err(result)
-    : Result.ok({ data: result });
+    : Result.ok({ data: id });
 };
 
 const DB: SatellitesInterface = {
