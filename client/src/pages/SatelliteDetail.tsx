@@ -52,20 +52,17 @@ const SatelliteDetail = () => {
         <div>No satellite selected</div>
       ) : (
         <>
-          <div className='grid grid-cols-[min-content_auto] gap-1'>
+          <div className='grid w-full rid grid-cols-4 justify-center gap-1 overflow-y-auto overflow-x-hidden'>
             <label htmlFor='name'>Name</label>
             <span id='name'>{sat.name}</span>
-
-            <label htmlFor='Latitude'>Latitude</label>
-            <span id='Latitude'>{sat.latitude}</span>
-
-            <label htmlFor='longitude'>Longitude</label>
-            <span id='longitude'>{sat.longitude}</span>
-
             <label htmlFor='owner'>Owner</label>
             <span id='owner'>{sat.owner}</span>
+            <label htmlFor='Latitude'>Latitude</label>
+            <span id='Latitude'>{sat.latitude}</span>
+            <label htmlFor='longitude'>Longitude</label>
+            <span id='longitude'>{sat.longitude}</span>
           </div>
-          <div className='flex w-full flex-row gap-1'>
+          <div className='flex w-full justify-center gap-1 border-t border-t-black pt-1'>
             <Button onClick={() => navigate(`/${id}/edit`)}>Edit</Button>
             <Button onClick={() => deleteSatellite()}>Del</Button>
           </div>

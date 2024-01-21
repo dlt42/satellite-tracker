@@ -34,14 +34,14 @@ const CreateSatelliteForm = () => {
   }
 
   return (
-    <div className='flex flex-col items-start gap-1'>
+    <>
       <Breadcrumbs
         items={[
           { label: 'Satellites', link: '/' },
           { label: 'New', link: '/new' },
         ]}
       />
-      <div className='grid grid-cols-[min-content_min-content] gap-1'>
+      <div className='grid w-full grid-cols-4 justify-center gap-1 overflow-y-auto overflow-x-hidden'>
         <label htmlFor='name'>Name</label>
         <input
           ref={nameRef}
@@ -49,6 +49,9 @@ const CreateSatelliteForm = () => {
           id='name'
           aria-describedby='nameHelp'
         />
+
+        <label htmlFor='owner'>Owner</label>
+        <input ref={ownerRef} type='text' id='owner' />
 
         <label htmlFor='latitude'>Latitude</label>
         <input
@@ -69,14 +72,11 @@ const CreateSatelliteForm = () => {
           max={180}
           min={-180}
         />
-
-        <label htmlFor='owner'>Owner</label>
-        <input ref={ownerRef} type='text' id='owner' />
       </div>
-      <div className='flex w-full flex-row gap-1'>
+      <div className='flex w-full justify-center gap-1 border-t border-t-black pt-1'>
         <Button onClick={() => add()}>Add</Button>
       </div>
-    </div>
+    </>
   );
 };
 

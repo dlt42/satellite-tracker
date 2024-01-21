@@ -50,3 +50,8 @@ To run client locally:
 * Highlight any satellites that come too close to each other 
 * Reposition tooltip dynamically / or display details elsewhere
 * Optionally store satellite data in the browser data store
+
+DONE
+Update layout
+Numbers in tooltip are now formatted to 3 decimal places
+

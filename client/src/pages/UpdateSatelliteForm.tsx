@@ -74,7 +74,7 @@ const UpdateSatelliteForm = React.memo(() => {
         ]}
       />
       <>
-        <div className='grid grid-cols-[min-content_min-content] gap-1'>
+        <div className='grid w-full grid-cols-4 justify-center gap-1 overflow-y-auto overflow-x-hidden'>
           <label htmlFor='name'>Name</label>
           <input
             ref={nameRef}
@@ -82,6 +82,9 @@ const UpdateSatelliteForm = React.memo(() => {
             id='name'
             aria-describedby='nameHelp'
           />
+
+          <label htmlFor='owner'>Owner</label>
+          <input ref={ownerRef} type='text' id='owner' />
 
           <label htmlFor='latitude'>Latitude</label>
           <input
@@ -102,11 +105,8 @@ const UpdateSatelliteForm = React.memo(() => {
             max={180}
             min={-180}
           />
-
-          <label htmlFor='owner'>Owner</label>
-          <input ref={ownerRef} type='text' id='owner' />
         </div>
-        <div className='flex w-full flex-row gap-1'>
+        <div className='flex w-full justify-center gap-1 border-t border-t-black pt-1'>
           <Button onClick={() => update()}>Update</Button>
         </div>
       </>

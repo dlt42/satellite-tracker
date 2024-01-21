@@ -25,7 +25,7 @@ export const SimpleMap = memo(() => {
   const [tooltipText, setTooltipText] = useState<string>('');
   return (
     <>
-      <ComposableMap projection='geoMercator'>
+      <ComposableMap projection='geoMercator' className='h-full bg-white'>
         <ZoomableGroup center={[0, 0]} zoom={1}>
           <Geographies geography={geoJSON}>
             {({ geographies }) =>

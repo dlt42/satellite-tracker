@@ -21,7 +21,7 @@ const SatelliteList = () => {
   return (
     <>
       <Breadcrumbs items={[{ label: 'Satellites', link: '/' }]} />
-      <div className='grid w-full grid-cols-[repeat(5,1fr)]'>
+      <div className='grid w-full grid-cols-[repeat(5,1fr)] overflow-y-auto'>
         <SatelliteListHeader items={['#', 'Name', 'Lat', 'Long', 'Owner']} />
         {satellites.map((satellite: Satellite) => (
           <SatelliteListRow satellite={satellite} key={`${satellite.id}`} />

@@ -28,9 +28,11 @@ const SatelliteAnnotation = ({
             {Object.entries({
               ...satellite,
               ...position,
-            }).map((current, index) => (
-              <div key={index}>{`${current[0]}: ${current[1]}`}</div>
-            ))}
+            }).map((current, index) => {
+              const val = current[1];
+              const displayVal = typeof val === 'number' ? val.toFixed(3) : val;
+              return <div key={index}>{`${current[0]}: ${displayVal}`}</div>;
+            })}
           </div>
         </foreignObject>
       </Annotation>

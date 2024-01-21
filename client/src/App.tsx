@@ -14,8 +14,11 @@ function App() {
   return (
     <Router>
       <SatelliteListProvider>
-        <div className='flex h-full flex-row items-start text-xs'>
-          <div className='flex h-full w-[280px] min-w-[280px] max-w-[280px] flex-col items-start gap-1 border-r border-r-black p-1 '>
+        <div className='flex h-full flex-col items-start text-xs'>
+          <div className='w-full grow overflow-y-hidden overflow-x-scroll bg-gray-500 text-center'>
+            <SimpleMap />
+          </div>
+          <div className='flex max-h-[280px] min-h-[280px] w-full flex-row flex-col items-start gap-1 border-t border-t-black p-1 '>
             <Routes>
               <Route path='/new' element={<CreateSatelliteForm />} />
               <Route path='/' element={<Satellites />}>
@@ -24,13 +27,6 @@ function App() {
                 <Route path=':id/edit' element={<UpdateSatelliteForm />} />
               </Route>
             </Routes>
-          </div>
-          <div className='flex h-full grow flex-col items-stretch'>
-            <SimpleMap />
-            <div className='grow self-stretch border-t border-t-black p-1'>
-              Use breadcrumb (top left) to return to the satellite list
-              <br />A two finger drag zooms the map
-            </div>
           </div>
         </div>
       </SatelliteListProvider>
