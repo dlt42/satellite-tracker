@@ -28,13 +28,15 @@ const updatePosition = (satellite: Satellite, positions: Positions) => {
     } else {
       const { latitude, longitude, bearing, speed } = position;
 
-      const p1 = new LatLon(latitude, longitude);
-      const p2: LatLon = p1.destinationPoint(speed * 1000, bearing);
-      const newBearing = p1.finalBearingTo(p2);
-      if (p2) {
-        position.latitude = p2.latitude;
-        position.longitude = p2.longitude;
-        position.bearing = newBearing;
+      if (latitude !== undefined && latitude !== undefined) {
+        const p1 = new LatLon(latitude, longitude);
+        const p2: LatLon = p1.destinationPoint(speed * 1000, bearing);
+        const newBearing = p1.finalBearingTo(p2);
+        if (p2) {
+          position.latitude = p2.latitude;
+          position.longitude = p2.longitude;
+          position.bearing = newBearing;
+        }
       }
     }
     return position;

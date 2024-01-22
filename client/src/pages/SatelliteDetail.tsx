@@ -16,7 +16,7 @@ const SatelliteDetail = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!sat && id) {
+        if (!sat && id && !Number.isNaN(Number.parseInt(id))) {
           const result = await getSatellite(Number.parseInt(id));
           if (result.isErr) throw result.error;
           setSat(result.value);
@@ -40,6 +40,14 @@ const SatelliteDetail = () => {
     }
   }
 
+  let state = '';
+  if (id && Number.isNaN(Number.parseInt(id))) {
+    state = 'INVALID_ID';
+  } else if (id && !sat) {
+    state = 'LOADING';
+  } else {
+    state = 'OK';
+  }
   return (
     <>
       <Breadcrumbs
@@ -48,21 +56,32 @@ const SatelliteDetail = () => {
           { label: `${id}`, link: `/${id}` },
         ]}
       />
-      {!sat ? (
-        <div>No satellite selected</div>
-      ) : (
+      {state === 'INVALID_ID' && <div className='p-1'>Invalid ID</div>}
+      {state === 'LOADING' && <div className='p-1'>Loading...</div>}
+      {state === 'OK' && (
         <>
-          <div className='grid w-full rid grid-cols-4 justify-center gap-1 overflow-y-auto overflow-x-hidden'>
-            <label htmlFor='name'>Name</label>
-            <span id='name'>{sat.name}</span>
-            <label htmlFor='owner'>Owner</label>
-            <span id='owner'>{sat.owner}</span>
-            <label htmlFor='Latitude'>Latitude</label>
-            <span id='Latitude'>{sat.latitude}</span>
-            <label htmlFor='longitude'>Longitude</label>
-            <span id='longitude'>{sat.longitude}</span>
+          <div className='grid w-full grid-cols-[minmax(25%,_1fr)_minmax(75%,_1fr)] justify-center gap-y-2 overflow-y-auto overflow-x-hidden pt-4'>
+            <label htmlFor='name' className='font-bold'>
+              Name
+            </label>
+            <div className='flex flex-col pb-4'>{sat?.name}</div>
+
+            <label htmlFor='owner' className='font-bold'>
+              Owner
+            </label>
+            <div className='flex flex-col pb-4'>{sat?.owner}</div>
+
+            <label htmlFor='latitude' className='font-bold'>
+              Latitude
+            </label>
+            <div className='flex flex-col pb-4'>{sat?.latitude}</div>
+
+            <label htmlFor='longitude' className='font-bold'>
+              Longitude
+            </label>
+            <div className='flex flex-col pb-4'>{sat?.longitude}</div>
           </div>
-          <div className='flex w-full justify-center gap-1 border-t border-t-black pt-1'>
+          <div className='flex w-full justify-center gap-1'>
             <Button onClick={() => navigate(`/${id}/edit`)}>Edit</Button>
             <Button onClick={() => deleteSatellite()}>Del</Button>
           </div>

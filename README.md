@@ -54,4 +54,5 @@ To run client locally:
 DONE
 Update layout
 Numbers in tooltip are now formatted to 3 decimal places
+Added form validation
 
