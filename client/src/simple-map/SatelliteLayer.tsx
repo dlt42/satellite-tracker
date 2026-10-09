@@ -16,10 +16,14 @@ import SatelliteAnnotation from './SatelliteAnnotation';
 export type MapMouseEvent = MouseEvent<SVGPathElement, globalThis.MouseEvent>;
 
 export const SatelliteLayer = () => {
-  const { satellites, getSatellite, highlightSatellite, highlightedSatellite } =
-    useContext(SatelliteContext);
+  const {
+    satellites,
+    getSatellite,
+    highlightSatellite,
+    highlightedSatellite,
+    paused,
+  } = useContext(SatelliteContext);
 
-  /** START POSITION UPDATE **/
   const [positions, setPositions] = useState<Positions>([]);
 
   const updatePositionsCallbackRef = useRef<() => void>(null!);
@@ -36,17 +40,18 @@ export const SatelliteLayer = () => {
 
   useEffect(() => {
     const tick = () => {
-      updatePositionsCallbackRef.current();
+      if (!paused) {
+        updatePositionsCallbackRef.current();
+      }
     };
-    const id = setInterval(tick, 100);
+    const id = setInterval(tick, 50);
     return () => clearInterval(id);
-  }, []);
+  }, [paused]);
 
-  /** END POSITION UPDATE **/
-
-  const onMouseEnter = useCallback(
+  const onMouseDownCapture = useCallback(
     async (e: MapMouseEvent) => {
       const id = e.currentTarget.getAttribute('data-satellite-id');
+      console.log('down');
       if (!id) return;
       const result: ContextResponse<Satellite> = await getSatellite(
         parseInt(id)
@@ -54,13 +59,20 @@ export const SatelliteLayer = () => {
       if (result.isOk) {
         highlightSatellite(result.value);
       }
+      e.stopPropagation();
+      e.preventDefault();
+      console.log('down');
+      return false;
     },
     [getSatellite, highlightSatellite]
   );
 
-  const onMouseLeave = useCallback(() => {
-    highlightSatellite(null);
-  }, [highlightSatellite]);
+  const onClick = useCallback((e: MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log('up');
+    return false;
+  }, []);
 
   return (
     <>
@@ -71,7 +83,10 @@ export const SatelliteLayer = () => {
               data-satellite-id={id}
               key={`${index}-${id}}`}
               coordinates={[longitude, latitude]}
-              {...{ onMouseLeave, onMouseEnter }}
+              {...{
+                onClick,
+                onMouseDownCapture,
+              }}
             >
               <circle
                 r={id === highlightedSatellite?.id ? 10 : 5}

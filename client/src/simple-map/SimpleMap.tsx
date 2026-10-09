@@ -1,6 +1,12 @@
 import './SimpleMap.css';
 
-import { memo, useState } from 'react';
+import {
+  memo,
+  MouseEventHandler,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import {
   ComposableMap,
   Geographies,
@@ -8,6 +14,7 @@ import {
   ZoomableGroup,
 } from 'react-simple-maps';
 
+import { SatelliteContext } from '../context/SatelliteContext';
 /**
  * GeoJSON file downloaded from:
  * https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson
@@ -21,11 +28,50 @@ export const getPosition = (e: MapMouseEvent) => {
 };
 
 export const SimpleMap = memo(() => {
+  const { highlightedSatellite, setPaused, setHighlightedSatellite } =
+    useContext(SatelliteContext);
   const [tooltipPosition, setTooltipPosition] = useState({ left: 0, top: 0 });
   const [tooltipText, setTooltipText] = useState<string>('');
+  const onMouseUp: MouseEventHandler = useCallback((e) => {
+    if (highlightedSatellite) {
+      e.stopPropagation();
+      e.preventDefault();
+      console.log('up map');
+      return false;
+    }
+    return true;
+  }, []);
+  const onMouseMove: MouseEventHandler = useCallback(
+    (e) => {
+      if (highlightedSatellite) {
+        e.stopPropagation();
+        e.preventDefault();
+        console.log('move map');
+        return false;
+      }
+      return true;
+    },
+    [highlightedSatellite]
+  );
   return (
     <>
-      <ComposableMap projection='geoMercator' className='h-full bg-white'>
+      <ComposableMap
+        projection='geoMercator'
+        className='h-full bg-white'
+        onClick={() => {
+          setHighlightedSatellite(null);
+        }}
+        onMouseEnter={() => {
+          setPaused(true);
+        }}
+        onMouseLeave={() => {
+          setPaused(false);
+        }}
+        {...{
+          onMouseMove,
+          onMouseUp,
+        }}
+      >
         <ZoomableGroup center={[0, 0]} zoom={1}>
           <Geographies geography={geoJSON}>
             {({ geographies }) =>

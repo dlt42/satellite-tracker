@@ -16,6 +16,7 @@ import { NewSatellite, Satellite, Satellites } from '../domain/satellite.types';
 
 type SatelliteContextType = {
   satellites: Satellites;
+  paused: boolean;
   highlightedSatellite: Satellite | null;
   highlightSatellite: (satellite: Satellite | null) => void;
   getSatellites: () => Promise<ContextResponse<Satellites>>;
@@ -26,6 +27,7 @@ type SatelliteContextType = {
     satellite: NewSatellite
   ) => Promise<ContextResponse<Satellite>>;
   setHighlightedSatellite: Dispatch<SetStateAction<Satellite | null>>;
+  setPaused: Dispatch<SetStateAction<boolean>>;
 };
 
 export type ContextResponse<T extends ResponseDataType> = Result<T, string>;
@@ -39,6 +41,7 @@ export const SatelliteListProvider = ({
   children: JSX.Element;
 }) => {
   const [satellites, setSatellites] = useState<Satellites>([] as Satellites);
+  const [paused, setPaused] = useState<boolean>(false);
 
   const [highlightedSatellite, setHighlightedSatellite] =
     useState<Satellite | null>(null);
@@ -148,6 +151,8 @@ export const SatelliteListProvider = ({
         removeSatellite,
         addSatellite,
         setHighlightedSatellite,
+        paused,
+        setPaused,
       }}
     >
       {children}
